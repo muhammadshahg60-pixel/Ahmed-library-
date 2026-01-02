@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ur" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>احمد میگا لائبریری</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
+    <style>
+        :root { --p: #064e3b; --g: #d4af37; }
+        body { font-family: sans-serif; background: #f4f4f4; margin: 0; text-align: center; padding-bottom: 80px; }
+        header { background: var(--p); color: white; padding: 30px; border-bottom: 5px solid var(--g); }
+        header h1 { font-family: 'Noto Nastaliq Urdu', serif; font-size: 2.5rem; margin: 0; color: var(--g); }
+        input { width: 85%; padding: 15px; border-radius: 30px; border: 2px solid var(--p); margin: 20px 0; font-size: 16px; outline: none; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 15px; padding: 15px; }
+        .card { background: white; padding: 20px; border-radius: 12px; border-right: 5px solid var(--g); box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .btn { display: block; background: var(--p); color: white; padding: 10px; text-decoration: none; border-radius: 5px; margin-top: 10px; font-weight: bold; }
+        .wa-float { position: fixed; bottom: 20px; left: 20px; background: #25d366; color: white; padding: 15px 25px; border-radius: 50px; text-decoration: none; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.3); z-index: 1000; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>احمد میگا لائبریری</h1>
+    <p>3000+ کتب: شاملہ، اصول، اور درسِ نظامی</p>
+</header>
+
+<input type="text" id="srch" placeholder="کتاب کا نام تلاش کریں..." onkeyup="run()">
+
+<div class="grid" id="box"></div>
+
+<a href="https://wa.me/923000000000" class="wa-float" target="_blank">رابطہ برائے اشتہارات 💬</a>
+
+<script>
+    const books = [
+        { t: "صحیح بخاری (شاملہ)", c: "حدیث", l: "https://shamela.ws/book/1681" },
+        { t: "صحیح مسلم (شاملہ)", c: "حدیث", l: "https://shamela.ws/book/1711" },
+        { t: "تفسیر ابن کثیر", c: "تفسیر", l: "https://usul.ai/books/1" },
+        { t: "فتاویٰ رضویہ", c: "فقہ", l: "https://www.dawateislami.net/bookslibrary/21" },
+        { t: "کلیاتِ اقبال", c: "ادب", l: "https://archive.org/details/Kulyat-e-Iqbal-Urdu" },
+        { t: "تعلیلاتِ خادمیہ", c: "صرف", l: "https://archive.org/details/Taleelat-e-Khadmia" },
+        { t: "تاثیرِ ابواب", c: "نحو", l: "https://archive.org/details/Taseer-e-Abwab" }
+    ];
+
+    function run() {
+        let q = document.getElementById('srch').value.toLowerCase();
+        document.getElementById('box').innerHTML = books.filter(b => b.t.toLowerCase().includes(q)).map(b => `
+            <div class="card">
+                <small>${b.c}</small>
+                <h3>${b.t}</h3>
+                <a href="${b.l}" target="_blank" class="btn">مطالعہ کریں</a>
+            </div>
+        `).join('');
+    }
+    run();
+</script>
+</body>
+</html>
