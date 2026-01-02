@@ -20,7 +20,78 @@
     </style>
 </head>
 <body>
+<div style="max-width: 600px; margin: 40px auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 2px solid #004a99;">
+    <h2 style="color: #004a99; text-align: center;">🕋 اسلامی کوئز (امتحان)</h2>
+    <hr>
+    <div id="quiz-container">
+        <h3 id="question" style="color: #333; min-height: 60px;">لوڈنگ...</h3>
+        <div id="options" style="display: grid; gap: 10px;"></div>
+        <p id="feedback" style="margin-top: 15px; font-weight: bold;"></p>
+        <button id="next-btn" onclick="nextQuestion()" style="display: none; background: #d4af37; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;">اگلا سوال</button>
+    </div>
+</div>
 
+<script>
+    const quizData = [
+        { q: "قرآن پاک کی سب سے بڑی سورت کون سی ہے؟", a: ["سورہ بقرہ", "سورہ یٰسین", "سورہ فاتحہ"], correct: 0 },
+        { q: "نبی کریم ﷺ کا روضہ مبارک کس شہر میں ہے؟", a: ["مکہ مکرمہ", "مدینہ منورہ", "بغداد شریف"], correct: 1 },
+        { q: "ارکانِ اسلام کتنے ہیں؟", a: ["3", "4", "5"], correct: 2 },
+        { q: "آسمانی کتابیں کتنی ہیں؟", a: ["4", "3", "5"], correct: 0 }
+    ];
+
+    let currentQ = 0;
+    let score = 0;
+
+    function loadQuiz() {
+        const qObj = quizData[currentQ];
+        document.getElementById('question').innerText = qObj.q;
+        const optionsDiv = document.getElementById('options');
+        optionsDiv.innerHTML = "";
+        document.getElementById('feedback').innerText = "";
+        document.getElementById('next-btn').style.display = "none";
+
+        qObj.a.forEach((opt, index) => {
+            const btn = document.createElement('button');
+            btn.innerText = opt;
+            btn.style.padding = "10px";
+            btn.style.border = "1px solid #004a99";
+            btn.style.borderRadius = "8px";
+            btn.style.background = "white";
+            btn.style.cursor = "pointer";
+            btn.onclick = () => checkAnswer(index, btn);
+            optionsDiv.appendChild(btn);
+        });
+    }
+
+    function checkAnswer(idx, btn) {
+        const correct = quizData[currentQ].correct;
+        const allBtns = document.querySelectorAll('#options button');
+        allBtns.forEach(b => b.disabled = true);
+
+        if(idx === correct) {
+            btn.style.background = "#25d366";
+            btn.style.color = "white";
+            document.getElementById('feedback').innerText = "✅ ماشاء اللہ! صحیح جواب۔";
+            score++;
+        } else {
+            btn.style.background = "#ff4d4d";
+            btn.style.color = "white";
+            document.getElementById('feedback').innerText = "❌ غلط جواب! صحیح جواب: " + quizData[currentQ].a[correct];
+        }
+        document.getElementById('next-btn').style.display = "block";
+    }
+
+    function nextQuestion() {
+        currentQ++;
+        if(currentQ < quizData.length) {
+            loadQuiz();
+        } else {
+            document.getElementById('quiz-container').innerHTML = `<h3>امتحان مکمل!</h3><p>آپ کا اسکور: ${score} میں سے ${quizData.length}</p><button onclick="location.reload()" style="background: #004a99; color: white; border: none; padding: 10px 20px; border-radius: 5px;">دوبارہ کھیلیں</button>`;
+        }
+    }
+
+    loadQuiz();
+</script>
 <header>
     <h1 style="margin:0;">احمد لائبریری</h1>
     <p style="margin:5px 0 0;">3000+ کتب کا سرچ انجن</p>
