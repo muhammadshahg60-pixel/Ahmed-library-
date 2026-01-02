@@ -3,69 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>احمد میگا ڈیجیٹل لائبریری</title>
+    <title>احمد شاہ میگا لائبریری</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #064e3b; --gold: #d4af37; --bg: #f4f7f6; }
-        body { font-family: 'Noto Nastaliq Urdu', serif; background: var(--bg); margin: 0; text-align: center; }
-        header { background: var(--primary); color: white; padding: 40px 20px; border-bottom: 6px solid var(--gold); }
-        header h1 { font-size: 2.5rem; margin: 0; color: var(--gold); }
-        .search-box { position: sticky; top: 0; background: white; padding: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); z-index: 100; }
-        input { width: 90%; max-width: 500px; padding: 12px 20px; border-radius: 25px; border: 2px solid var(--primary); outline: none; font-size: 16px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 25px; }
-        .card { background: white; padding: 20px; border-radius: 12px; border-right: 6px solid var(--gold); box-shadow: 0 4px 12px rgba(0,0,0,0.05); transition: 0.3s; }
-        .card:hover { transform: translateY(-5px); }
-        .tag { font-family: sans-serif; font-size: 11px; background: #eee; padding: 3px 10px; border-radius: 10px; color: #444; }
-        .btn { display: block; background: var(--primary); color: white; padding: 10px; text-decoration: none; border-radius: 6px; margin-top: 15px; font-weight: bold; }
-        .wa-btn { position: fixed; bottom: 20px; left: 20px; background: #25d366; color: white; padding: 15px; border-radius: 50px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 1000; }
+        :root { --blue: #004a99; --gold: #d4af37; --white: #ffffff; }
+        body { font-family: 'Noto Nastaliq Urdu', serif; background: #f4f7f6; margin: 0; }
+        
+        /* اوپر کی پٹی (Header) */
+        header { background: var(--blue); color: white; padding: 20px; text-align: center; border-bottom: 5px solid var(--gold); }
+        .logo-area { font-size: 2.5rem; font-weight: bold; color: var(--gold); }
+        
+        /* مینیو بٹن (Menu) */
+        nav { background: #003366; padding: 10px; display: flex; justify-content: center; gap: 20px; }
+        nav a { color: white; text-decoration: none; font-size: 14px; font-family: sans-serif; padding: 5px 15px; border-radius: 5px; }
+        nav a:hover { background: var(--gold); }
+
+        /* سرچ بار */
+        .search-box { background: white; padding: 30px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        #srch { width: 80%; max-width: 600px; padding: 15px; border: 2px solid var(--blue); border-radius: 30px; font-size: 18px; outline: none; }
+
+        /* کتابوں کا ڈیزائن */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; padding: 40px; }
+        .card { background: white; border: 1px solid #ddd; border-radius: 10px; overflow: hidden; transition: 0.3s; }
+        .card:hover { transform: scale(1.03); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .card-top { background: var(--blue); color: white; padding: 10px; font-size: 12px; }
+        .card-body { padding: 20px; text-align: center; }
+        .card h3 { color: #333; margin: 10px 0; font-size: 1.5rem; }
+        .btn { display: block; background: var(--blue); color: white; padding: 12px; text-decoration: none; font-weight: bold; border-radius: 5px; }
+        .btn:hover { background: var(--gold); }
+
+        /* واٹس ایپ بٹن */
+        .wa { position: fixed; bottom: 20px; left: 20px; background: #25d366; color: white; padding: 15px; border-radius: 50px; text-decoration: none; z-index: 1000; font-weight: bold; }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>احمد میگا لائبریری</h1>
+    <div class="logo-area">احمد شاہ سینٹرل ڈیجیٹل لائبریری</div>
     <p>3000+ اسلامی و علمی کتب کا نایاب مجموعہ</p>
 </header>
 
+<nav>
+    <a href="#">Home</a>
+    <a href="#">Staff</a>
+    <a href="#">Books</a>
+    <a href="#">Contact</a>
+</nav>
+
 <div class="search-box">
-    <input type="text" id="srch" placeholder="کتاب یا موضوع تلاش کریں (مثلاً بخاری، فقہ، صرف)..." onkeyup="search()">
+    <input type="text" id="srch" placeholder="کتاب کا نام یہاں تلاش کریں..." onkeyup="search()">
 </div>
 
-<div class="grid" id="container"></div>
+<div class="grid" id="box"></div>
 
-<a href="https://wa.me/923000000000" class="wa-btn" target="_blank">رابطہ برائے اشتہارات 💬</a>
+<a href="https://wa.me/923000000000" class="wa">رابطہ برائے اشتہارات 💬</a>
 
 <script>
-    // یہ وہ ڈیٹا بیس ہے جہاں آپ ہزاروں کتابیں شامل کر سکتے ہیں
-    const library = [
-        { t: "صحیح بخاری (شاملہ)", c: "حدیث", s: "Shamela", l: "https://shamela.ws/book/1681" },
-        { t: "صحیح مسلم (شاملہ)", c: "حدیث", s: "Shamela", l: "https://shamela.ws/book/1711" },
-        { t: "تفسیر ابن کثیر", c: "تفسیر", s: "Usul.ai", l: "https://usul.ai/books/1" },
-        { t: "فتاویٰ رضویہ (مکمل)", c: "فقہ", s: "Dawat-e-Islami", l: "https://www.dawateislami.net/bookslibrary/21" },
-        { t: "بہارِ شریعت", c: "فقہ", s: "Archive", l: "https://archive.org/details/BaharEShariat" },
-        { t: "تعلیلاتِ خادمیہ", c: "صرف", s: "Dars-e-Nizami", l: "https://archive.org/details/Taleelat-e-Khadmia" },
-        { t: "تاثیرِ ابواب", c: "نحو", s: "Dars-e-Nizami", l: "https://archive.org/details/Taseer-e-Abwab" },
-        { t: "المنجد (عربی اردو)", c: "لغت", s: "Dictionary", l: "https://archive.org/details/Al-Munjid-Arabic-Urdu-Dictionary" },
-        { t: "کلیاتِ اقبال", c: "ادب", s: "Poetry", l: "https://archive.org/details/Kulyat-e-Iqbal-Urdu" },
-        { t: "کیمیائے سعادت", c: "اخلاقیات", s: "Tasawwuf", l: "https://archive.org/details/Kimiya-e-Saadaturdu" }
+    const data = [
+        { t: "صحیح بخاری شریف", c: "حدیث", l: "https://shamela.ws/book/1681" },
+        { t: "تفسیر ابن کثیر", c: "تفسیر", l: "https://usul.ai/books/1" },
+        { t: "فتاویٰ رضویہ", c: "فقہ", l: "https://www.dawateislami.net/bookslibrary/21" },
+        { t: "کلیاتِ اقبال", c: "شاعری", l: "https://archive.org/details/Kulyat-e-Iqbal-Urdu" },
+        { t: "تعلیلاتِ خادمیہ", c: "صرف", l: "https://archive.org/details/Taleelat-e-Khadmia" }
     ];
 
-    function show(data) {
-        document.getElementById('container').innerHTML = data.map(b => `
+    function show(books) {
+        document.getElementById('box').innerHTML = books.map(b => `
             <div class="card">
-                <span class="tag">${b.s} | ${b.c}</span>
-                <h3>${b.t}</h3>
-                <a href="${b.l}" target="_blank" class="btn">مطالعہ کریں</a>
+                <div class="card-top">${b.c}</div>
+                <div class="card-body">
+                    <h3>${b.t}</h3>
+                    <a href="${b.l}" target="_blank" class="btn">مطالعہ کریں</a>
+                </div>
             </div>
         `).join('');
     }
 
     function search() {
-        let val = document.getElementById('srch').value.toLowerCase();
-        show(library.filter(x => x.t.toLowerCase().includes(val) || x.c.toLowerCase().includes(val)));
+        let q = document.getElementById('srch').value.toLowerCase();
+        show(data.filter(x => x.t.toLowerCase().includes(q)));
     }
-
-    show(library);
+    show(data);
 </script>
 </body>
 </html>
