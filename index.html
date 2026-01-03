@@ -3,269 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>احمد لائبریری</title>
+    <title>احمد شاہ AI ڈیجیٹل لائبریری</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
     <style>
-        :root { --blue: #004a99; --gold: #d4af37; }
+        :root { --ai-color: #7c3aed; --blue: #004a99; --gold: #d4af37; }
         body { font-family: 'Noto Nastaliq Urdu', serif; background: #f0f2f5; margin: 0; }
-        header { background: var(--blue); color: white; padding: 25px; text-align: center; border-bottom: 5px solid var(--gold); }
-        .search-area { background: white; padding: 30px; text-align: center; position: sticky; top: 0; z-index: 1000; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
-        #searchBox { width: 85%; max-width: 600px; padding: 15px; border: 2px solid var(--blue); border-radius: 30px; font-size: 18px; outline: none; text-align: center; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 30px; }
-        .card { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-top: 5px solid var(--blue); transition: 0.3s; }
-        .card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-        .tag { background: #eee; font-size: 12px; padding: 3px 10px; border-radius: 10px; color: var(--blue); font-family: sans-serif; }
-        .btn { display: block; background: var(--blue); color: white; padding: 12px; text-decoration: none; border-radius: 6px; margin-top: 15px; font-weight: bold; }
-        .wa-btn { position: fixed; bottom: 20px; left: 20px; background: #25d366; color: white; padding: 15px 20px; border-radius: 50px; text-decoration: none; font-weight: bold; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-    </style>
-</head>
-<body>
-<div style="max-width: 600px; margin: 40px auto; background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); border: 2px solid #004a99;">
-    <h2 style="color: #004a99; text-align: center;">🕋 اسلامی کوئز (امتحان)</h2>
-    <hr>
-    <div id="quiz-container">
-        <h3 id="question" style="color: #333; min-height: 60px;">لوڈنگ...</h3>
-        <div id="options" style="display: grid; gap: 10px;"></div>
-        <p id="feedback" style="margin-top: 15px; font-weight: bold;"></p>
-        <button id="next-btn" onclick="nextQuestion()" style="display: none; background: #d4af37; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-weight: bold;">اگلا سوال</button>
-    </div>
-</div>
-
-<script>
-    const quizData = [
-        { q: "قرآن پاک کی سب سے بڑی سورت کون سی ہے؟", a: ["سورہ بقرہ", "سورہ یٰسین", "سورہ فاتحہ"], correct: 0 },
-        { q: "نبی کریم ﷺ کا روضہ مبارک کس شہر میں ہے؟", a: ["مکہ مکرمہ", "مدینہ منورہ", "بغداد شریف"], correct: 1 },
-        { q: "ارکانِ اسلام کتنے ہیں؟", a: ["3", "4", "5"], correct: 2 },
-        { q: "آسمانی کتابیں کتنی ہیں؟", a: ["4", "3", "5"], correct: 0 }
-    ];
-
-    let currentQ = 0;
-    let score = 0;
-
-    function loadQuiz() {
-        const qObj = quizData[currentQ];
-        document.getElementById('question').innerText = qObj.q;
-        const optionsDiv = document.getElementById('options');
-        optionsDiv.innerHTML = "";
-        document.getElementById('feedback').innerText = "";
-        document.getElementById('next-btn').style.display = "none";
-
-        qObj.a.forEach((opt, index) => {
-            const btn = document.createElement('button');
-            btn.innerText = opt;
-            btn.style.padding = "10px";
-            btn.style.border = "1px solid #004a99";
-            btn.style.borderRadius = "8px";
-            btn.style.background = "white";
-            btn.style.cursor = "pointer";
-            btn.onclick = () => checkAnswer(index, btn);
-            optionsDiv.appendChild(btn);
-        });
-    }
-
-    function checkAnswer(idx, btn) {
-        const correct = quizData[currentQ].correct;
-        const allBtns = document.querySelectorAll('#options button');
-        allBtns.forEach(b => b.disabled = true);
-
-        if(idx === correct) {
-            btn.style.background = "#25d366";
-            btn.style.color = "white";
-            document.getElementById('feedback').innerText = "✅ ماشاء اللہ! صحیح جواب۔";
-            score++;
-        } else {
-            btn.style.background = "#ff4d4d";
-            btn.style.color = "white";
-            document.getElementById('feedback').innerText = "❌ غلط جواب! صحیح جواب: " + quizData[currentQ].a[correct];
-        }
-        document.getElementById('next-btn').style.display = "block";
-    }
-
-    function nextQuestion() {
-        currentQ++;
-        if(currentQ < quizData.length) {
-            loadQuiz();
-        } else {
-            document.getElementById('quiz-container').innerHTML = `<h3>امتحان مکمل!</h3><p>آپ کا اسکور: ${score} میں سے ${quizData.length}</p><button onclick="location.reload()" style="background: #004a99; color: white; border: none; padding: 10px 20px; border-radius: 5px;">دوبارہ کھیلیں</button>`;
-        }
-    }
-
-    loadQuiz();
-</script>
-<header>
-    <h1 style="margin:0;">احمد لائبریری</h1>
-    <p style="margin:5px 0 0;">3000+ کتب کا سرچ انجن</p>
-</header>
-
-<div class="search-area">
-    <input type="text" id="searchBox" placeholder="کتاب کا نام لکھیں (مثلاً: ترمذی، فقہ، تاریخ)..." onkeyup="doSearch()">
-    <p id="count" style="font-size: 14px; color: #666; margin-top: 10px;"></p>
-</div>
-
-<div class="grid" id="container"></div>
-
-
-<script>
-    // 3000 کتب کا ڈیٹا بیس (یہاں ہم نے بڑی کیٹیگریز اور کتب شامل کی ہیں)
-    const books = [
         
-<!DOCTYPE html>
-<html lang="ur" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>احمد شاہ میگا ڈیجیٹل لائبریری</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
-    <style>
-        :root { --blue: #004a99; --gold: #d4af37; --white: #ffffff; }
-        body { font-family: 'Noto Nastaliq Urdu', serif; background: #f4f7f6; margin: 0; scroll-behavior: smooth; }
+        /* AI ہیڈر */
+        .ai-header { background: linear-gradient(135deg, var(--ai-color), var(--blue)); color: white; padding: 40px 20px; text-align: center; border-bottom: 5px solid var(--gold); }
+        
+        /* AI چیٹ باکس */
+        .ai-box { max-width: 600px; margin: -30px auto 20px; background: white; border-radius: 15px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        #aiInput { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 10px; font-family: inherit; margin-bottom: 10px; }
+        .ai-reply { background: #f3e8ff; padding: 15px; border-radius: 10px; color: #4c1d95; display: none; margin-top: 10px; font-weight: bold; }
 
-        /* شاندار ہوم پیج ڈیزائن */
-        .hero { 
-            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), 
-                        url('https://images.unsplash.com/photo-1548013146-72479768bbaa?q=80&w=1473&auto=format&fit=crop');
-            background-size: cover; background-position: center;
-            height: 450px; display: flex; flex-direction: column;
-            justify-content: center; align-items: center; color: white; text-align: center;
-            border-bottom: 8px solid var(--gold);
-        }
-        .hero h1 { font-size: 3.5rem; margin: 0; text-shadow: 3px 3px 10px rgba(0,0,0,0.5); }
-        .hero p { font-size: 1.5rem; color: var(--gold); }
-
-        /* سرچ بار */
-        .search-area { background: white; padding: 25px; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 15px rgba(0,0,0,0.1); text-align: center; }
-        #searchBox { width: 85%; max-width: 600px; padding: 15px; border: 2px solid var(--blue); border-radius: 50px; font-size: 18px; outline: none; text-align: center; font-family: inherit; }
-
-        /* کارڈ ڈیزائن */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; padding: 40px; }
-        .card { background: white; border-radius: 15px; padding: 25px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); border-right: 8px solid var(--blue); transition: 0.3s; }
-        .card:hover { transform: translateY(-10px); box-shadow: 0 12px 25px rgba(0,0,0,0.1); border-right-color: var(--gold); }
-        .card h3 { color: #222; margin: 10px 0; font-size: 1.6rem; }
-        .tag { background: #e8f0fe; color: var(--blue); padding: 5px 12px; border-radius: 50px; font-size: 12px; font-family: sans-serif; font-weight: bold; }
-        .btn { display: block; background: var(--blue); color: white; padding: 12px; text-decoration: none; border-radius: 8px; margin-top: 15px; font-weight: bold; text-align: center; }
-        .btn:hover { background: var(--gold); }
-
-        /* کوئز گیم ڈیزائن */
-        .quiz-section { max-width: 700px; margin: 50px auto; background: white; padding: 35px; border-radius: 20px; border: 3px solid var(--gold); text-align: center; }
-        .opt-btn { width: 100%; padding: 12px; margin: 5px 0; border: 1px solid #ddd; border-radius: 8px; background: #f9f9f9; cursor: pointer; font-family: inherit; font-size: 16px; }
-        .next-btn { background: var(--gold); color: white; border: none; padding: 10px 30px; border-radius: 5px; margin-top: 15px; cursor: pointer; font-weight: bold; display: none; }
+        /* بقیہ ڈیزائن وہی رہے گا */
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 20px; }
+        .card { background: white; border-radius: 12px; padding: 20px; border-top: 5px solid var(--blue); box-shadow: 0 4px 10px rgba(0,0,0,0.05); text-align: center; }
+        .btn { display: block; background: var(--blue); color: white; padding: 10px; text-decoration: none; border-radius: 5px; margin-top: 10px; font-weight: bold; }
     </style>
 </head>
 <body>
 
-<div class="hero">
-    <h1>احمد شاہ سینٹرل لائبریری</h1>
-    <p>علمِ دین کا مستند اور ڈیجیٹل مرکز</p>
-    <a href="#books" style="color: white; text-decoration: none; border: 1px solid white; padding: 10px 20px; border-radius: 50px; margin-top: 20px;">کتابیں دیکھیں</a>
+<div class="ai-header">
+    <h1>احمد شاہ AIلائبریری </h1>
+    <p>مجھ سے کچھ بھی پوچھیں، میں آپ کو صحیح کتاب بتاؤں گا</p>
 </div>
 
-<div class="search-area">
-    <input type="text" id="searchBox" placeholder="کتاب کا نام یہاں تلاش کریں..." onkeyup="doSearch()">
+<div class="ai-box">
+    <input type="text" id="aiInput" placeholder="مثلاً: مجھے حدیث کی کتاب چاہیے یا فقہ کی..." onkeyup="aiAsk()">
+    <div id="aiReply" class="ai-reply"></div>
 </div>
 
-<div class="grid" id="books">
-    </div>
-
-<div class="quiz-section">
-    <h2 style="color: var(--blue);">🕋 روزانہ کا اسلامی کوئز</h2>
-    <div id="quiz-body">
-        <h3 id="question">سوال لوڈ ہو رہا ہے...</h3>
-        <div id="options"></div>
-        <p id="feedback" style="font-weight: bold; margin: 15px;"></p>
-        <button id="next-btn" class="next-btn" onclick="nextQ()">اگلا سوال</button>
-    </div>
-</div>
+<div class="grid" id="mainGrid"></div>
 
 <script>
-    const library = [
-        { t: "صحیح بخاری (پی ڈی ایف)", c: "حدیث", l: "https://archive.org/download/waq79565/79565_text.pdf" },
-        { t: "صحیح مسلم (پی ڈی ایف)", c: "حدیث", l: "http://www.archive.org/download/samusamu/samu.pdf" },
-        { t: "سنن ابوداؤد", c: "حدیث", l: "https://archive.org/download/WAQ54451_201312/WAQ54451_text.pdf" },
-        { t: "جامع ترمذی", c: "حدیث", l: "https://archive.org/download/SutrafSutraf/sutraf_text.pdf" },
-        { t: "سنن ابن ماجہ", c: "حدیث", l: "https://archive.org/download/SuibmaafSuibmaaf/suibmaaf.pdf" },
-        { t: "سنن نسائی", c: "حدیث", l: "https://archive.org/download/waq54455/waq54455_text.pdf" },
-        { t: "تفسیر تاثیر القرآن (جلد 1)", c: "تفسیر", l: "http://www.archive.org/download/Taseer-ul-Quran-Urdu-1/Taseer-ul-Quran-Urdu-1.pdf" },
-        { t: "تفسیر تاثیر القرآن (جلد 2)", c: "تفسیر", l: "http://www.archive.org/download/Taseer-ul-Quran-Urdu-2/Taseer-ul-Quran-Urdu-2.pdf" },
-        { t: "تفسیر تاثیر القرآن (جلد 3)", c: "تفسیر", l: "http://www.archive.org/download/Taseer-ul-Quran-Urdu-3/Taseer-ul-Quran-Urdu-3.pdf" },
-        { t: "تفسیر تاثیر القرآن (جلد 4)", c: "تفسیر", l: "http://www.archive.org/download/Taseer-ul-Quran-4/Taseer-ul-Quran-4.pdf" },
-        { t: "تفسیر ثنائی (جلد 1)", c: "تفسیر", l: "http://archive.org/download/Tafseer-Sanaai-1/Tafseer-Sanaai-1.pdf" },
-        { t: "تفسیر ثنائی (جلد 2)", c: "تفسیر", l: "http://archive.org/download/Tafseer-Sanaai-2/Tafseer-Sanaai-2.pdf" },
-        { t: "تفسیر ثنائی (جلد 3)", c: "تفسیر", l: "https://archive.org/download/TafseerSanaai3/TafseerSanaai3.pdf" },
-        { t: "تفسیر مظہری", c: "تفسیر", l: "https://www.darsenizami.in/2020/07/tafseer-e-mazhari-by.html" },
-        { t: "تفسیر حسنات", c: "تفسیر", l: "https://www.darsenizami.in/2020/03/tafseer-e-hasanat-complete-7-by.html" },
-        { t: "تفسیر روح المعانی", c: "تفسیر", l: "https://www.kitabsalaf.id/2017/03/tafsir-ruh-al-maani.html" }
+    const books = [
+        { t: "صحیح بخاری شریف", c: "حدیث", l: "https://archive.org/download/waq79565/79565_text.pdf" },
+        { t: "صحیح مسلم شریف", c: "حدیث", l: "http://www.archive.org/download/samusamu/samu.pdf" },
+        { t: "تفسیر ابن کثیر", c: "تفسیر", l: "https://archive.org/details/Tafseer-Ibn-e-Kaseer-Urdu-Complete-5-Volumes" },
+        { t: "فتاویٰ رضویہ", c: "فقہ", l: "https://archive.org/details/FatawaRazawiyyaFull" },
+        { t: "بہارِ شریعت", c: "فقہ", l: "https://archive.org/details/BaharEShariatFull" }
     ];
 
     function render(data) {
-        document.getElementById('books').innerHTML = data.map(b => `
+        document.getElementById('mainGrid').innerHTML = data.map(b => `
             <div class="card">
-                <span class="tag">${b.c}</span>
+                <small>${b.c}</small>
                 <h3>${b.t}</h3>
-                <a href="${b.l}" target="_blank" class="btn">مطالعہ کریں (PDF)</a>
+                <a href="${b.l}" target="_blank" class="btn">مطالعہ کریں</a>
             </div>
         `).join('');
     }
 
-    function doSearch() {
-        let q = document.getElementById('searchBox').value.toLowerCase();
-        render(library.filter(x => x.t.toLowerCase().includes(q)));
-    }
-
-    // کوئز سسٹم
-    const qData = [
-        { q: "اسلام کے کتنے بنیادی ارکان ہیں؟", a: ["تین", "پانچ", "سات"], c: 1 },
-        { q: "قرآن پاک کی سب سے پہلی سورت کون سی ہے؟", a: ["سورہ فاتحہ", "سورہ بقرہ", "سورہ علق"], c: 0 },
-        { q: "روزہ کس ہجری میں فرض ہوا؟", a: ["1 ہجری", "2 ہجری", "3 ہجری"], c: 1 }
-    ];
-    let cur = 0;
-    function loadQ() {
-        const item = qData[cur];
-        document.getElementById('question').innerText = item.q;
-        document.getElementById('options').innerHTML = item.a.map((o,i) => `<button class="opt-btn" onclick="check(${i})">${o}</button>`).join('');
-        document.getElementById('feedback').innerText = "";
-        document.getElementById('next-btn').style.display = "none";
-    }
-    function check(i) {
-        if(i === qData[cur].c) { document.getElementById('feedback').innerText = "✅ درست جواب!"; document.getElementById('feedback').style.color="green"; }
-        else { document.getElementById('feedback').innerText = "❌ غلط جواب! صحیح جواب: " + qData[cur].a[qData[cur].c]; document.getElementById('feedback').style.color="red"; }
-        document.getElementById('next-btn').style.display = "inline-block";
-    }
-    function nextQ() { cur = (cur + 1) % qData.length; loadQ(); }
-
-    render(library);
-    loadQ();
-</script>
-
-</body>
-</html>
-
-
-
-
-    
-        // یہاں ہم مزید ہزاروں کتب کے لنکس اسی ترتیب سے جوڑ سکتے ہیں
+    // AI Logic: صارف کی بات سمجھ کر جواب دینا
+    function aiAsk() {
+        let q = document.getElementById('aiInput').value.toLowerCase();
+        let reply = document.getElementById('aiReply');
         
-    ];
-
-    function show(list) {
-        const cont = document.getElementById('container');
-        document.getElementById('count').innerText = "مجموعی کتب: " + list.length;
-        cont.innerHTML = list.map(b => `
-            <div class="card">
-                <span class="tag">${b.c}</span>
-                <h3>${b.t}</h3>
-                <a href="${b.l}" target="_blank" class="btn">کتاب کھولیں</a>
-            </div>
-        `).join('');
+        if (q.length < 2) { reply.style.display = "none"; return; }
+        
+        reply.style.display = "block";
+        
+        if (q.includes("حدیث") || q.includes("بخاری")) {
+            reply.innerText = "AI جواب: آپ کو حدیث پڑھنی ہے؟ میں آپ کو 'صحیح بخاری' اور 'صحیح مسلم' تجویز کرتا ہوں۔";
+        } else if (q.includes("فقہ") || q.includes("مسئلہ")) {
+            reply.innerText = "AI جواب: فقہی مسائل کے لیے 'فتاویٰ رضویہ' یا 'بہارِ شریعت' بہترین انتخاب ہیں۔";
+        } else if (q.includes("تفسیر") || q.includes("قرآن")) {
+            reply.innerText = "AI جواب: قرآن پاک سمجھنے کے لیے 'تفسیر ابن کثیر' ایک مستند کتاب ہے۔";
+        } else {
+            reply.innerText = "AI جواب: میں آپ کی بات سمجھنے کی کوشش کر رہا ہوں۔ کیا آپ حدیث، فقہ یا تفسیر میں سے کچھ ڈھونڈ رہے ہیں؟";
+        }
+        
+        // کتابوں کو بھی ساتھ ساتھ فلٹر کریں
+        render(books.filter(x => x.t.includes(q) || x.c.includes(q)));
     }
 
-    function doSearch() {
-        let q = document.getElementById('searchBox').value.toLowerCase();
-        let filtered = books.filter(x => x.t.toLowerCase().includes(q) || x.c.toLowerCase().includes(q));
-        show(filtered);
-    }
-
-    show(books); // Initial Load
+    render(books);
 </script>
 
 </body>
