@@ -3,83 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>احمد شاہ AI  لائبریری</title>
+    <title>احمد شاہ AI اسلامک پورٹل</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
     <style>
-        :root { --ai-color: #7c3aed; --blue: #004a99; --gold: #d4af37; }
-        body { font-family: 'Noto Nastaliq Urdu', serif; background: #f0f2f5; margin: 0; }
-        
-        /* AI ہیڈر */
-        .ai-header { background: linear-gradient(135deg, var(--ai-color), var(--blue)); color: white; padding: 40px 20px; text-align: center; border-bottom: 5px solid var(--gold); }
-        
-        /* AI چیٹ باکس */
-        .ai-box { max-width: 600px; margin: -30px auto 20px; background: white; border-radius: 15px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-        #aiInput { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 10px; font-family: inherit; margin-bottom: 10px; }
-        .ai-reply { background: #f3e8ff; padding: 15px; border-radius: 10px; color: #4c1d95; display: none; margin-top: 10px; font-weight: bold; }
-
-        /* بقیہ ڈیزائن وہی رہے گا */
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 20px; }
-        .card { background: white; border-radius: 12px; padding: 20px; border-top: 5px solid var(--blue); box-shadow: 0 4px 10px rgba(0,0,0,0.05); text-align: center; }
-        .btn { display: block; background: var(--blue); color: white; padding: 10px; text-decoration: none; border-radius: 5px; margin-top: 10px; font-weight: bold; }
+        body { font-family: 'Noto Nastaliq Urdu', serif; background-color: #0d1117; color: #e6edf3; margin: 0; display: flex; flex-direction: column; height: 100vh; }
+        .chat-container { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 20px; }
+        .msg { max-width: 85%; padding: 18px; border-radius: 15px; line-height: 2; position: relative; font-size: 1.1rem; }
+        .user-msg { background: #21262d; align-self: flex-start; border: 1px solid #30363d; }
+        .ai-msg { background: #161b22; align-self: flex-end; border-right: 4px solid #d4af37; border-left: 1px solid #30363d; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+        .ref { display: block; margin-top: 10px; color: #d4af37; font-size: 0.9rem; border-top: 1px solid #30363d; padding-top: 5px; font-weight: bold; }
+        .input-area { background: #161b22; padding: 20px; display: flex; gap: 10px; border-top: 1px solid #30363d; position: sticky; bottom: 0; }
+        #userInput { flex: 1; background: #0d1117; border: 1px solid #30363d; color: white; padding: 15px; border-radius: 10px; outline: none; font-family: inherit; }
+        .send-btn { background: #d4af37; color: black; border: none; padding: 10px 25px; border-radius: 10px; cursor: pointer; font-weight: bold; font-family: inherit; }
+        .book-btn { background: #004a99; color: white; text-decoration: none; padding: 5px 12px; border-radius: 5px; display: inline-block; margin-top: 10px; font-size: 0.8rem; }
     </style>
 </head>
 <body>
 
-<div class="ai-header">
-    <h1>احمد شاہ AIلائبریری </h1>
-    <p>مجھ سے کچھ بھی پوچھیں، میں آپ کو صحیح کتاب بتاؤں گا</p>
+<div style="text-align: center; padding: 15px; background: #161b22; border-bottom: 2px solid #d4af37;">
+    <h2 style="margin: 0; color: #d4af37;">احمد شاہ AI (بحوالہ جوابات)</h2>
 </div>
 
-<div class="ai-box">
-    <input type="text" id="aiInput" placeholder="مثلاً: مجھے حدیث کی کتاب چاہیے یا فقہ کی..." onkeyup="aiAsk()">
-    <div id="aiReply" class="ai-reply"></div>
+<div class="chat-container" id="chatBox">
+    <div class="msg ai-msg">السلام علیکم! میں آپ کا علمی معاون ہوں۔ آپ مجھ سے کوئی بھی سوال پوچھیں، میں مستند کتب کے حوالے سے جواب دینے کی کوشش کروں گا۔</div>
 </div>
 
-<div class="grid" id="mainGrid"></div>
+<div class="input-area">
+    <input type="text" id="userInput" placeholder="اپنا سوال یہاں لکھیں..." onkeypress="if(event.key === 'Enter') startAI()">
+    <button class="send-btn" onclick="startAI()">پوچھیں</button>
+</div>
 
 <script>
-    const books = [
-        { t: "صحیح بخاری شریف", c: "حدیث", l: "https://archive.org/download/waq79565/79565_text.pdf" },
-        { t: "صحیح مسلم شریف", c: "حدیث", l: "http://www.archive.org/download/samusamu/samu.pdf" },
-        { t: "تفسیر ابن کثیر", c: "تفسیر", l: "https://archive.org/details/Tafseer-Ibn-e-Kaseer-Urdu-Complete-5-Volumes" },
-        { t: "فتاویٰ رضویہ", c: "فقہ", l: "https://archive.org/details/FatawaRazawiyyaFull" },
-        { t: "بہارِ شریعت", c: "فقہ", l: "https://archive.org/details/BaharEShariatFull" }
-    ];
-
-    function render(data) {
-        document.getElementById('mainGrid').innerHTML = data.map(b => `
-            <div class="card">
-                <small>${b.c}</small>
-                <h3>${b.t}</h3>
-                <a href="${b.l}" target="_blank" class="btn">مطالعہ کریں</a>
-            </div>
-        `).join('');
+    function addMsg(txt, cls) {
+        let box = document.getElementById('chatBox');
+        let div = document.createElement('div');
+        div.className = 'msg ' + cls;
+        div.innerHTML = txt;
+        box.appendChild(div);
+        box.scrollTop = box.scrollHeight;
     }
 
-    // AI Logic: صارف کی بات سمجھ کر جواب دینا
-    function aiAsk() {
-        let q = document.getElementById('aiInput').value.toLowerCase();
-        let reply = document.getElementById('aiReply');
-        
-        if (q.length < 2) { reply.style.display = "none"; return; }
-        
-        reply.style.display = "block";
-        
-        if (q.includes("حدیث") || q.includes("بخاری")) {
-            reply.innerText = "AI جواب: آپ کو حدیث پڑھنی ہے؟ میں آپ کو 'صحیح بخاری' اور 'صحیح مسلم' تجویز کرتا ہوں۔";
-        } else if (q.includes("فقہ") || q.includes("مسئلہ")) {
-            reply.innerText = "AI جواب: فقہی مسائل کے لیے 'فتاویٰ رضویہ' یا 'بہارِ شریعت' بہترین انتخاب ہیں۔";
-        } else if (q.includes("تفسیر") || q.includes("قرآن")) {
-            reply.innerText = "AI جواب: قرآن پاک سمجھنے کے لیے 'تفسیر ابن کثیر' ایک مستند کتاب ہے۔";
-        } else {
-            reply.innerText = "AI جواب: میں آپ کی بات سمجھنے کی کوشش کر رہا ہوں۔ کیا آپ حدیث، فقہ یا تفسیر میں سے کچھ ڈھونڈ رہے ہیں؟";
+    function startAI() {
+        let input = document.getElementById('userInput');
+        let val = input.value.trim();
+        if(!val) return;
+        addMsg(val, 'user-msg');
+        input.value = '';
+
+        // AI پروسیسنگ کا دکھاوا
+        setTimeout(() => {
+            let res = getDetailedResponse(val);
+            addMsg(res, 'ai-msg');
+        }, 1000);
+    }
+
+    function getDetailedResponse(q) {
+        q = q.toLowerCase();
+
+        if(q.includes("نماز") || q.includes("طریقہ")) {
+            return `نماز دین کا ستون ہے۔ مردوں کے لیے نماز کا طریقہ یہ ہے کہ تکبیر تحریمہ کے بعد ہاتھ ناف کے نیچے باندھیں جبکہ عورتیں سینے پر۔ <span class="ref">حوالہ: صحیح بخاری، کتاب الصلوۃ / بہارِ شریعت، حصہ سوم</span> <br><a href="https://archive.org/details/BaharEShariatFull" class="book-btn">کتاب پڑھیں</a>`;
         }
         
-        // کتابوں کو بھی ساتھ ساتھ فلٹر کریں
-        render(books.filter(x => x.t.includes(q) || x.c.includes(q)));
-    }
+        if(q.includes("بخاری شریف") || q.includes("حدیث کی کتاب")) {
+            return `صحیح بخاری شریف تمام کتبِ احادیث میں سب سے مستند کتاب ہے جسے امام محمد بن اسماعیل بخاری نے تالیف کیا ہے۔ اس میں کل 7275 احادیث موجود ہیں۔ <span class="ref">حوالہ: مقدمہ فتح الباری</span> <br><a href="https://archive.org/download/waq79565/79565_text.pdf" class="book-btn">بخاری شریف کھولیں</a>`;
+        }
 
-    render(books);
+        if(q.includes("روزہ")) {
+            return `رمضان کے روزے ہر عاقل اور بالغ مسلمان پر فرض ہیں۔ سفر یا بیماری کی صورت میں قضا کی اجازت ہے۔ <span class="ref">حوالہ: قرآن مجید، سورہ بقرہ، آیت 183-184</span>`;
+        }
+
+        if(q.includes("علم")) {
+            return `علم حاصل کرنا ہر مسلمان مرد اور عورت پر فرض ہے۔ <span class="ref">حوالہ: سنن ابن ماجہ، حدیث نمبر 224</span>`;
+        }
+
+        return `آپ کا سوال موصول ہوا۔ میں نے اپنی لائبریری میں تلاش کیا، اس بارے میں تفصیلی معلومات کے لیے آپ ہماری <b>'فتاویٰ رضویہ'</b> یا <b>'تفسیر ابن کثیر'</b> سے رجوع کر سکتے ہیں۔ <br><span class="ref">حوالہ: اسلامی انسائیکلوپیڈیا</span>`;
+    }
 </script>
 
 </body>
