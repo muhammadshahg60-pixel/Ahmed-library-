@@ -1,82 +1,87 @@
+
 <!DOCTYPE html>
 <html lang="ur" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>احمد شاہ AI اسلامک پورٹل</title>
+    <title>احمد شاہ میگا AI لائبریری</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Noto Nastaliq Urdu', serif; background-color: #0d1117; color: #e6edf3; margin: 0; display: flex; flex-direction: column; height: 100vh; }
-        .chat-container { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 20px; }
-        .msg { max-width: 85%; padding: 18px; border-radius: 15px; line-height: 2; position: relative; font-size: 1.1rem; }
-        .user-msg { background: #21262d; align-self: flex-start; border: 1px solid #30363d; }
-        .ai-msg { background: #161b22; align-self: flex-end; border-right: 4px solid #d4af37; border-left: 1px solid #30363d; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-        .ref { display: block; margin-top: 10px; color: #d4af37; font-size: 0.9rem; border-top: 1px solid #30363d; padding-top: 5px; font-weight: bold; }
-        .input-area { background: #161b22; padding: 20px; display: flex; gap: 10px; border-top: 1px solid #30363d; position: sticky; bottom: 0; }
-        #userInput { flex: 1; background: #0d1117; border: 1px solid #30363d; color: white; padding: 15px; border-radius: 10px; outline: none; font-family: inherit; }
-        .send-btn { background: #d4af37; color: black; border: none; padding: 10px 25px; border-radius: 10px; cursor: pointer; font-weight: bold; font-family: inherit; }
-        .book-btn { background: #004a99; color: white; text-decoration: none; padding: 5px 12px; border-radius: 5px; display: inline-block; margin-top: 10px; font-size: 0.8rem; }
+        :root { --blue: #004a99; --gold: #d4af37; }
+        body { font-family: 'Noto Nastaliq Urdu', serif; background: #0d1117; color: white; margin: 0; }
+        .hero { background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1548013146-72479768bbaa?q=80&w=1473&auto=format&fit=crop'); background-size: cover; height: 300px; display: flex; flex-direction: column; justify-content: center; align-items: center; border-bottom: 5px solid var(--gold); }
+        .chat-section { max-width: 800px; margin: 20px auto; background: #161b22; border-radius: 15px; padding: 20px; border: 1px solid #30363d; }
+        #chatDisplay { height: 300px; overflow-y: auto; padding: 10px; border-bottom: 1px solid #30363d; margin-bottom: 15px; }
+        .msg { padding: 10px; margin: 5px 0; border-radius: 10px; line-height: 1.8; }
+        .ai-msg { background: #004a99; border-right: 4px solid var(--gold); }
+        .user-msg { background: #21262d; }
+        .input-area { display: flex; gap: 10px; }
+        input { flex: 1; background: #0d1117; border: 1px solid #444; color: white; padding: 12px; border-radius: 8px; font-family: inherit; }
+        button { background: var(--gold); border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 20px; }
+        .card { background: white; color: black; border-radius: 10px; padding: 15px; text-align: center; border-top: 5px solid var(--blue); }
+        .btn { display: block; background: var(--blue); color: white; padding: 8px; text-decoration: none; border-radius: 5px; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-<div style="text-align: center; padding: 15px; background: #161b22; border-bottom: 2px solid #d4af37;">
-    <h2 style="margin: 0; color: #d4af37;">احمد شاہ AI (بحوالہ جوابات)</h2>
+<div class="hero">
+    <h1>احمد شاہ AI پورٹل</h1>
+    <p>تحقیقی جوابات اور مستند کتب</p>
 </div>
 
-<div class="chat-container" id="chatBox">
-    <div class="msg ai-msg">السلام علیکم! میں آپ کا علمی معاون ہوں۔ آپ مجھ سے کوئی بھی سوال پوچھیں، میں مستند کتب کے حوالے سے جواب دینے کی کوشش کروں گا۔</div>
+<div class="chat-section">
+    <div id="chatDisplay">
+        <div class="msg ai-msg">السلام علیکم! میں آپ کا AI معاون ہوں۔ کوئی بھی سوال پوچھیں، میں حوالوں کے ساتھ جواب دوں گا۔</div>
+    </div>
+    <div class="input-area">
+        <input type="text" id="userInput" placeholder="اپنا سوال یہاں لکھیں...">
+        <button onclick="askAI()">پوچھیں</button>
+    </div>
 </div>
 
-<div class="input-area">
-    <input type="text" id="userInput" placeholder="اپنا سوال یہاں لکھیں..." onkeypress="if(event.key === 'Enter') startAI()">
-    <button class="send-btn" onclick="startAI()">پوچھیں</button>
+<h2 style="text-align:center; color:var(--gold);">دستیاب کتب (Library)</h2>
+<div class="grid">
+    <div class="card"><h3>صحیح بخاری</h3><a href="https://archive.org/download/waq79565/79565_text.pdf" target="_blank" class="btn">مطالعہ کریں</a></div>
+    <div class="card"><h3>صحیح مسلم</h3><a href="http://www.archive.org/download/samusamu/samu.pdf" target="_blank" class="btn">مطالعہ کریں</a></div>
+    <div class="card"><h3>تفسیر ابن کثیر</h3><a href="https://archive.org/details/Tafseer-Ibn-e-Kaseer-Urdu-Complete-5-Volumes" target="_blank" class="btn">مطالعہ کریں</a></div>
+    <div class="card"><h3>فتاویٰ رضویہ</h3><a href="https://archive.org/details/FatawaRazawiyyaFull" target="_blank" class="btn">مطالعہ کریں</a></div>
 </div>
 
 <script>
-    function addMsg(txt, cls) {
-        let box = document.getElementById('chatBox');
-        let div = document.createElement('div');
-        div.className = 'msg ' + cls;
-        div.innerHTML = txt;
-        box.appendChild(div);
-        box.scrollTop = box.scrollHeight;
-    }
+    // آپ کی نئی API Key یہاں لگا دی گئی ہے
+    const API_KEY = "AIzaSyDHbBg5u0dTmWwoFMbGR2CenC7P2sXVs0s"; 
 
-    function startAI() {
-        let input = document.getElementById('userInput');
-        let val = input.value.trim();
-        if(!val) return;
-        addMsg(val, 'user-msg');
+    async function askAI() {
+        const input = document.getElementById('userInput');
+        const text = input.value.trim();
+        if (!text) return;
+
+        addMessage(text, 'user-msg');
         input.value = '';
 
-        // AI پروسیسنگ کا دکھاوا
-        setTimeout(() => {
-            let res = getDetailedResponse(val);
-            addMsg(res, 'ai-msg');
-        }, 1000);
+        try {
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: "آپ ایک مستند عالم دین ہیں۔ اردو میں جواب دیں اور آخر میں کتاب کا حوالہ لازمی دیں: " + text }] }]
+                })
+            });
+            const data = await response.json();
+            const aiResponse = data.candidates[0].content.parts[0].text;
+            addMessage(aiResponse, 'ai-msg');
+        } catch (e) {
+            addMessage("معذرت، ابھی جواب نہیں مل سکا۔", 'ai-msg');
+        }
     }
 
-    function getDetailedResponse(q) {
-        q = q.toLowerCase();
-
-        if(q.includes("نماز") || q.includes("طریقہ")) {
-            return `نماز دین کا ستون ہے۔ مردوں کے لیے نماز کا طریقہ یہ ہے کہ تکبیر تحریمہ کے بعد ہاتھ ناف کے نیچے باندھیں جبکہ عورتیں سینے پر۔ <span class="ref">حوالہ: صحیح بخاری، کتاب الصلوۃ / بہارِ شریعت، حصہ سوم</span> <br><a href="https://archive.org/details/BaharEShariatFull" class="book-btn">کتاب پڑھیں</a>`;
-        }
-        
-        if(q.includes("بخاری شریف") || q.includes("حدیث کی کتاب")) {
-            return `صحیح بخاری شریف تمام کتبِ احادیث میں سب سے مستند کتاب ہے جسے امام محمد بن اسماعیل بخاری نے تالیف کیا ہے۔ اس میں کل 7275 احادیث موجود ہیں۔ <span class="ref">حوالہ: مقدمہ فتح الباری</span> <br><a href="https://archive.org/download/waq79565/79565_text.pdf" class="book-btn">بخاری شریف کھولیں</a>`;
-        }
-
-        if(q.includes("روزہ")) {
-            return `رمضان کے روزے ہر عاقل اور بالغ مسلمان پر فرض ہیں۔ سفر یا بیماری کی صورت میں قضا کی اجازت ہے۔ <span class="ref">حوالہ: قرآن مجید، سورہ بقرہ، آیت 183-184</span>`;
-        }
-
-        if(q.includes("علم")) {
-            return `علم حاصل کرنا ہر مسلمان مرد اور عورت پر فرض ہے۔ <span class="ref">حوالہ: سنن ابن ماجہ، حدیث نمبر 224</span>`;
-        }
-
-        return `آپ کا سوال موصول ہوا۔ میں نے اپنی لائبریری میں تلاش کیا، اس بارے میں تفصیلی معلومات کے لیے آپ ہماری <b>'فتاویٰ رضویہ'</b> یا <b>'تفسیر ابن کثیر'</b> سے رجوع کر سکتے ہیں۔ <br><span class="ref">حوالہ: اسلامی انسائیکلوپیڈیا</span>`;
+    function addMessage(t, c) {
+        const div = document.createElement('div');
+        div.className = `msg ${c}`;
+        div.innerText = t;
+        document.getElementById('chatDisplay').appendChild(div);
+        document.getElementById('chatDisplay').scrollTop = document.getElementById('chatDisplay').scrollHeight;
     }
 </script>
 
