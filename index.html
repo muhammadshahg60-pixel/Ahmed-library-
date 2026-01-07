@@ -1,30 +1,16 @@
 import google.generativeai as genai
 
-# آپ کی فراہم کردہ API Key یہاں لگا دی گئی ہے
-genai.configure(api_key="AIzaSyDHbBg5u0dTmWwoFMbGR2CenC7P2sXVs0s")
-
-# AI ماڈل کا انتخاب
+# آپ کی کی (Key)
+my_key = "AIzaSyDHbBg5u0dTmWwoFMbGR2CenC7P2sXVs0s"
+genai.configure(api_key=my_key)
 model = genai.GenerativeModel('gemini-1.5-flash')
 
-print("========================================")
-print("   آپ کا ذاتی AI اسسٹنٹ تیار ہے!   ")
-print("   (بند کرنے کے لیے 'exit' لکھیں)   ")
-print("========================================\n")
+print("--- AI چل رہا ہے، سوال لکھیں ---")
 
 while True:
-    user_query = input("آپ کا سوال: ")
-    
-    if user_query.lower() in ['exit', 'quit', 'بند']:
-        print("خدا حافظ!")
-        break
-        
-    try:
-        # AI کو سوال بھیجنا
-        response = model.generate_content(user_query)
-        
-        print("\n--- AI کا جواب ---")
-        print(response.text)
-        print("------------------\n")
-        
-    except Exception as e:
-        print(f"اوہ! کچھ مسئلہ ہوا ہے۔ براہ کرم انٹرنیٹ چیک کریں یا کی (Key) کی درستگی دیکھیں۔")
+    print("\n")
+    sawal = input("آپ کا سوال: ")
+    jawab = model.generate_content(sawal)
+    print("------------------------")
+    print("AI کا جواب: " + jawab.text)
+    print("------------------------")
